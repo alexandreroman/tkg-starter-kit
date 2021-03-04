@@ -1,0 +1,6 @@
+.DS_Store
+terraform.tfvars
+cluster-issuer.yaml
+.terraform*
+*.tfstate*
+modules.tf
