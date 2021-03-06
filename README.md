@@ -7,9 +7,9 @@ with a bunch of core services:
 - [Let's Encrypt](https://letsencrypt.org) certificate generation with [cert-manager](https://cert-manager.io)
 - [Contour](https://projectcontour.io) (ingress controller)
 - [External-DNS](https://github.com/kubernetes-sigs/external-dns) with [AWS Route 53](https://aws.amazon.com/route53/) integration (expose your Kubernetes services/ingresses as DNS records)
-- [Harbor](https://goharbor.io) (OCI-compatible registry)
 
 You can also deploy optional services:
+- [Harbor](https://goharbor.io) (OCI-compatible registry)
 - [Kubeapps](https://kubeapps.com) (a tool for deploying Helm charts)
 - [Concourse](https://concourse-ci.org)
 
