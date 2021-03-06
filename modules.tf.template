@@ -43,3 +43,16 @@ module "kubeapps" {
 output "kubeapps_token" {
   value = module.kubeapps.token
 }
+
+# >-- Concourse --<
+module "concourse" {
+  source = "./concourse"
+
+  dockerhub_user     = var.dockerhub_user
+  dockerhub_password = var.dockerhub_password
+  domain             = var.domain
+  admin_password     = random_string.concourse_admin_password.result
+}
+output "concourse_admin_password" {
+  value = random_string.concourse_admin_password.result
+}

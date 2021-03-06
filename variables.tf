@@ -37,3 +37,9 @@ resource "random_string" "harbor_admin_password" {
   special          = true
   override_special = "_%@"
 }
+
+resource "random_string" "concourse_admin_password" {
+  length           = 16
+  special          = true
+  override_special = "_%@"
+}
