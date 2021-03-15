@@ -12,6 +12,7 @@ You can also deploy optional services:
 - [Harbor](https://goharbor.io) (OCI-compatible registry)
 - [Kubeapps](https://kubeapps.com) (a tool for deploying Helm charts)
 - [Concourse](https://concourse-ci.org)
+- [Jenkins](https://www.jenkins.io)
 
 Using these Terraform scripts, you can deploy those services to your TKG cluster in a matter of minutes.
 

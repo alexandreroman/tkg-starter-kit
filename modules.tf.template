@@ -56,3 +56,16 @@ module "concourse" {
 output "concourse_admin_password" {
   value = random_string.concourse_admin_password.result
 }
+
+/**
+# >-- Jenkins --<
+module "jenkins" {
+  source = "./jenkins"
+
+  domain         = var.domain
+  admin_password = random_string.jenkins_admin_password.result
+}
+output "jenkins_admin_password" {
+  value = random_string.jenkins_admin_password.result
+}
+**/
