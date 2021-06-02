@@ -3,28 +3,23 @@ terraform {
     kubernetes = {
       source  = "hashicorp/kubernetes"
       version = ">= 2.0.0"
-    }
-    kubectl = {
-      source = "gavinbunney/kubectl"
-      version = ">= 1.10.0"
-    }
+    }    
     helm = {
-      source = "hashicorp/helm"
-      version = "1.3.2"
+      source  = "hashicorp/helm"
+       version = "2.1.2"
     }
   }
 }
 
 provider "kubernetes" {
-  config_path = "~/.kube/config"
+  config_path = var.kube_config
 }
 
 provider "helm" {
   kubernetes {
-    config_path = "~/.kube/config"
+    config_path = var.kube_config
   }
 }
-
 resource "helm_release" "jenkins" {
   name  = "jenkins"
   chart = "https://github.com/jenkinsci/helm-charts/releases/download/jenkins-3.2.4/jenkins-3.2.4.tgz"
@@ -92,71 +87,71 @@ resource "helm_release" "jenkins" {
     value = "loggedInUsersCanDoAnything"
   }
   set {
-    name  = "controller.JCasC.configScripts.jenkins"
+    name = "controller.JCasC.configScripts.jenkins"
     value = yamlencode({
-      jenkins: {
-        systemMessage: "Welcome to Jenkins powered by VMware Tanzu!"
+      jenkins : {
+        systemMessage : "Welcome to Jenkins powered by VMware Tanzu!"
       }
     })
   }
   set {
-    name  = "controller.JCasC.configScripts.adoptopenjdk"
+    name = "controller.JCasC.configScripts.adoptopenjdk"
     value = yamlencode({
-      tool: {
-        jdk: {
-          installations: [
-            { name: "jdk-11", properties: [{
-              installSource: {
-                installers: [{
-                  adoptOpenJdkInstaller: {
-                    id: "jdk-11.0.10+9"
+      tool : {
+        jdk : {
+          installations : [
+            { name : "jdk-11", properties : [{
+              installSource : {
+                installers : [{
+                  adoptOpenJdkInstaller : {
+                    id : "jdk-11.0.10+9"
                   }
                 }]
               }
-            }
-          ]}
-        ]}
+              }
+            ] }
+        ] }
       }
     })
   }
   set {
-    name  = "controller.JCasC.configScripts.mvn"
+    name = "controller.JCasC.configScripts.mvn"
     value = yamlencode({
-      tool: {
-        maven: {
-          installations: [
-            { name: "Maven 3", properties: [{
-              installSource: {
-                installers: [{
-                  maven: {
-                    id: "3.6.3"
+      tool : {
+        maven : {
+          installations : [
+            { name : "Maven 3", properties : [{
+              installSource : {
+                installers : [{
+                  maven : {
+                    id : "3.6.3"
                   }
                 }]
               }
-            }
-          ]}
-        ]}
+              }
+            ] }
+        ] }
       }
     })
   }
   set {
-    name  = "controller.JCasC.configScripts.nodejs"
+    name = "controller.JCasC.configScripts.nodejs"
     value = yamlencode({
-      tool: {
-        nodejs: {
-          installations: [
-            { name: "NodeJS 14", properties: [{
-              installSource: {
-                installers: [{
-                  nodeJSInstaller: {
-                    id: "14.16.0",
-                    npmPackagesRefreshHours: 72
+      tool : {
+        nodejs : {
+          installations : [
+            { name : "NodeJS 14", properties : [{
+              installSource : {
+                installers : [{
+                  nodeJSInstaller : {
+                    id : "14.16.0",
+                    npmPackagesRefreshHours : 72
                   }
                 }]
               }
-            }
-          ]}
-        ]}
+              }
+            ] }
+        ] }
       }
     })
   }

@@ -10,6 +10,7 @@ module "route53" {
   dockerhub_user           = var.dockerhub_user
   dockerhub_password       = var.dockerhub_password
   domain                   = var.domain
+  kube_config              = var.kube_config
 }
 
 module "contour" {
@@ -17,6 +18,7 @@ module "contour" {
 
   dockerhub_user     = var.dockerhub_user
   dockerhub_password = var.dockerhub_password
+  kube_config        = var.kube_config
 }
 
 #--- Optional modules
@@ -29,6 +31,7 @@ module "harbor" {
   dockerhub_password = var.dockerhub_password
   domain             = var.domain
   admin_password     = random_string.harbor_admin_password.result
+  kube_config        = var.kube_config
 }
 output "harbor_admin_password" {
   value = random_string.harbor_admin_password.result
@@ -38,7 +41,8 @@ output "harbor_admin_password" {
 module "kubeapps" {
   source = "./kubeapps"
 
-  domain = var.domain
+  domain      = var.domain
+  kube_config = var.kube_config
 }
 output "kubeapps_token" {
   value = module.kubeapps.token
@@ -51,7 +55,9 @@ module "concourse" {
   dockerhub_user     = var.dockerhub_user
   dockerhub_password = var.dockerhub_password
   domain             = var.domain
+  kube_config        = var.kube_config
   admin_password     = random_string.concourse_admin_password.result
+
 }
 output "concourse_admin_password" {
   value = random_string.concourse_admin_password.result
@@ -63,6 +69,7 @@ module "jenkins" {
   source = "./jenkins"
 
   domain         = var.domain
+  kube_config    = var.kube_config
   admin_password = random_string.jenkins_admin_password.result
 }
 output "jenkins_admin_password" {

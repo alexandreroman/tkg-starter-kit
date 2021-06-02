@@ -32,6 +32,12 @@ variable "dockerhub_password" {
   type = string
 }
 
+variable "kube_config" {
+  type    = string
+  default = "~/.kube/config"
+}
+
+
 resource "random_string" "harbor_admin_password" {
   length           = 16
   special          = true

@@ -1,6 +1,6 @@
 variable "aws_region" {
   type    = string
-  default = "eu-west-1"
+  default = "eu-west-3"
 }
 
 variable "aws_access_key" {
@@ -34,5 +34,9 @@ variable "dockerhub_user" {
 }
 
 variable "dockerhub_password" {
+  type = string
+}
+
+variable "kube_config" {
   type = string
 }

@@ -3,25 +3,21 @@ terraform {
     kubernetes = {
       source  = "hashicorp/kubernetes"
       version = ">= 2.0.0"
-    }
-    kubectl = {
-      source = "gavinbunney/kubectl"
-      version = ">= 1.10.0"
-    }
+    }    
     helm = {
-      source = "hashicorp/helm"
-      version = "1.3.2"
+      source  = "hashicorp/helm"
+       version = "2.1.2"
     }
   }
 }
 
 provider "kubernetes" {
-  config_path = "~/.kube/config"
+  config_path = var.kube_config
 }
 
 provider "helm" {
   kubernetes {
-    config_path = "~/.kube/config"
+    config_path = var.kube_config
   }
 }
 
@@ -65,7 +61,7 @@ resource "kubernetes_service_account" "kubeapps_operator" {
 }
 
 resource "kubernetes_cluster_role_binding" "kubeapps_operator" {
-  depends_on = [ helm_release.kubeapps ]
+  depends_on = [helm_release.kubeapps]
 
   metadata {
     name = "kubeapps-operator"
