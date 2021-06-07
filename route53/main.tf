@@ -14,6 +14,7 @@ terraform {
     }
     kubernetes-alpha = {
       source = "hashicorp/kubernetes-alpha"
+      version = "0.4.1"
     }
     helm = {
       source  = "hashicorp/helm"
@@ -173,7 +174,6 @@ resource "kubernetes_manifest" "cert_manager_issuer" {
     }
   }
 }
-
 
 
 /*
