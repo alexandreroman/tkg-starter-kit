@@ -2,6 +2,10 @@
 aws_access_key = "fake_XXXXXXXXXXXXXXXXXXXX"
 aws_secret_key = "fake_XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX"
 
+# Optional
+# aws_region = "eu-west-3"
+# kube_config = "path-to-kubconfig-file"
+
 # Set the domain you want to use.
 # This must be a domain you own: remind that you have to create
 # a route53 hosted zone first though.
