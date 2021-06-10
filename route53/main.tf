@@ -180,7 +180,7 @@ resource "helm_release" "external_dns" {
   depends_on = [ kubernetes_secret.dockerhub, kubernetes_namespace.external_dns ]
 
   name      = "external-dns"
-  chart     = "https://charts.bitnami.com/bitnami/external-dns-4.8.3.tgz"
+  chart     = "https://charts.bitnami.com/bitnami/external-dns-5.0.3.tgz"
   namespace = "external-dns"
 
   set {
@@ -206,5 +206,17 @@ resource "helm_release" "external_dns" {
   set {
     name  = "policy"
     value = "sync"
+  }
+  set {
+    name  = "sources[0]"
+    value = "service"
+  }
+  set {
+    name  = "sources[1]"
+    value = "ingress"
+  }
+  set {
+    name  = "sources[2]"
+    value = "contour-httpproxy"
   }
 }
