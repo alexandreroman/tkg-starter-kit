@@ -79,8 +79,7 @@ resource "kubernetes_cluster_role_binding" "kubeapps_operator" {
 }
 
 module "credentials" {
-  source = "matti/resource/shell"
-  #TODO Manage kubeconfig variable.
+  source = "matti/resource/shell"  
   command = <<EOT
     KUBECONFIG=${var.kube_config} kubectl get secret $(KUBECONFIG=${var.kube_config} kubectl get serviceaccount kubeapps-operator -o jsonpath='{range .secrets[*]}{.name}{"\n"}{end}' | grep kubeapps-operator-token) -o jsonpath='{.data.token}' -o go-template='{{.data.token | base64decode}}' && echo
   EOT
