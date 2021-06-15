@@ -3,10 +3,10 @@ terraform {
     kubernetes = {
       source  = "hashicorp/kubernetes"
       version = ">= 2.0.0"
-    }    
+    }
     helm = {
       source  = "hashicorp/helm"
-       version = "2.1.2"
+      version = "2.1.2"
     }
   }
 }
@@ -82,7 +82,7 @@ module "credentials" {
   source = "matti/resource/shell"
   #TODO Manage kubeconfig variable.
   command = <<EOT
-    kubectl get secret $(kubectl get serviceaccount kubeapps-operator -o jsonpath='{range .secrets[*]}{.name}{"\n"}{end}' | grep kubeapps-operator-token) -o jsonpath='{.data.token}' -o go-template='{{.data.token | base64decode}}' && echo
+    KUBECONFIG=${var.kube_config} kubectl get secret $(KUBECONFIG=${var.kube_config} kubectl get serviceaccount kubeapps-operator -o jsonpath='{range .secrets[*]}{.name}{"\n"}{end}' | grep kubeapps-operator-token) -o jsonpath='{.data.token}' -o go-template='{{.data.token | base64decode}}' && echo
   EOT
 }
 

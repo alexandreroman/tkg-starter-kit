@@ -28,6 +28,8 @@ resource "kubernetes_namespace" "contour" {
 }
 
 resource "kubernetes_secret" "dockerhub" {
+  depends_on = [kubernetes_namespace.contour]
+
   metadata {
     name      = "regcreds"
     namespace = "contour"

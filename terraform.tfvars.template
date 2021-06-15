@@ -2,8 +2,10 @@
 aws_access_key = "fake_XXXXXXXXXXXXXXXXXXXX"
 aws_secret_key = "fake_XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX"
 
-# Optional
+# Optional variables
 # aws_region = "eu-west-3"
+# if you overide the value, export the 'KUBECONFIG' env variable also. Eg.  export KUBECONFIG=~/.kube/config-files/kubeconfig-aws-tools.yml
+# or set it on the command line KUBECONFIG=~/.kube/config-files/kubeconfig-aws-tools.yml terraform apply
 # kube_config = "path-to-kubconfig-file"
 
 # Set the domain you want to use.
