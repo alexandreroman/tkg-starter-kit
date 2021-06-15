@@ -209,4 +209,16 @@ resource "helm_release" "external_dns" {
     name  = "policy"
     value = "sync"
   }
+  set {
+    name  = "sources[0]"
+    value = "service"
+  }
+  set {
+    name  = "sources[1]"
+    value = "ingress"
+  }
+  set {
+    name  = "sources[2]"
+    value = "contour-httpproxy"
+  }
 }

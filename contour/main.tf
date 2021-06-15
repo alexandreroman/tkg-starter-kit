@@ -52,8 +52,9 @@ resource "helm_release" "contour" {
   depends_on = [kubernetes_secret.dockerhub, kubernetes_namespace.contour]
 
   name      = "contour"
-  chart     = "https://charts.bitnami.com/bitnami/contour-4.1.3.tgz"
+  chart     = "https://charts.bitnami.com/bitnami/contour-4.3.6.tgz"
   namespace = "contour"
+  timeout   = 600
 
   set {
     name  = "contour.image.pullSecrets"
