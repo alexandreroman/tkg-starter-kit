@@ -1,0 +1,55 @@
+apiVersion: kpack.io/v1alpha1
+kind: ClusterStack
+metadata:
+  name: base
+spec:
+  id: "io.buildpacks.stacks.bionic"
+  buildImage:
+    image: "paketobuildpacks/build:base-cnb"
+  runImage:
+    image: "paketobuildpacks/run:base-cnb"
+---
+apiVersion: kpack.io/v1alpha1
+kind: ClusterStack
+metadata:
+  name: full
+spec:
+  id: "io.buildpacks.stacks.bionic"
+  buildImage:
+    image: "paketobuildpacks/build:full-cnb"
+  runImage:
+    image: "paketobuildpacks/run:full-cnb"
+---
+apiVersion: kpack.io/v1alpha1
+kind: ClusterStack
+metadata:
+  name: tiny
+spec:
+  id: "io.paketo.stacks.tiny"
+  buildImage:
+    image: "paketobuildpacks/build:tiny-cnb"
+  runImage:
+    image: "paketobuildpacks/run:tiny-cnb"
+---
+apiVersion: kpack.io/v1alpha1
+kind: ClusterStack
+metadata:
+  name: heroku-20
+spec:
+  id: "heroku-20"
+  buildImage:
+    image: "heroku/pack:20-build"
+  runImage:
+    image: "heroku/pack:20"
+---
+apiVersion: kpack.io/v1alpha1
+kind: ClusterStack
+metadata:
+  name: heroku-18
+spec:
+  id: "heroku-18"
+  buildImage:
+    image: "heroku/pack:18-build"
+  runImage:
+    image: "heroku/pack:18"
+

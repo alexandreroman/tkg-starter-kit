@@ -1,0 +1,12 @@
+apiVersion: kpack.io/v1alpha1
+kind: ClusterStore
+metadata:
+  name: default-store
+spec:
+  sources:
+  #- image: gcr.io/paketo-buildpacks/java:5.9.1
+  - image: gcr.io/paketo-buildpacks/java:5.8.0
+  - image: gcr.io/paketo-buildpacks/go
+  - image: gcr.io/paketo-buildpacks/nodejs
+
+

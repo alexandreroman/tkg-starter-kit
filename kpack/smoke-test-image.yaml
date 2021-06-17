@@ -1,0 +1,14 @@
+apiVersion: kpack.io/v1alpha1
+kind: Image
+metadata:
+  name: spring-petclinic-image
+spec:
+  tag: harbor.mytanzu.xyz/library/spring-petclinic
+  serviceAccount: harbor-service-account
+  builder:
+    name: default-builder
+    kind: Builder
+  source:
+    git:
+      url: https://github.com/spring-projects/spring-petclinic
+      revision: main

@@ -22,12 +22,15 @@ provider "helm" {
 }
 
 resource "kubernetes_namespace" "harbor" {
+
   metadata {
     name = "harbor"
   }
 }
 
 resource "kubernetes_secret" "dockerhub" {
+  depends_on = [kubernetes_namespace.harbor]
+  
   metadata {
     name      = "regcreds"
     namespace = "harbor"

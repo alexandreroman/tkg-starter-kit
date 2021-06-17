@@ -63,6 +63,18 @@ output "concourse_admin_password" {
   value = random_string.concourse_admin_password.result
 }
 
+# >-- kPACK --< configure kPack and connect it with the deployed harbor.
+module "kpack" {
+  source = "./kpack"
+
+  dockerhub_user     = var.dockerhub_user
+  dockerhub_password = var.dockerhub_password
+  kube_config        = var.kube_config
+  domain             = var.domain
+  admin_password     = random_string.harbor_admin_password.result
+}
+
+
 /**
 # >-- Jenkins --<
 module "jenkins" {
