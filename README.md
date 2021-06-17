@@ -13,6 +13,7 @@ You can also deploy optional services:
 - [Kubeapps](https://kubeapps.com) (a tool for deploying Helm charts)
 - [Concourse](https://concourse-ci.org)
 - [Jenkins](https://www.jenkins.io)
+- [kpack](https://github.com/pivotal/kpack) (a kubernetes [Cloud Native Buildpacks CNB](https://buildpacks.io/))
 
 Using these Terraform scripts, you can deploy those services to your TKG cluster in a matter of minutes.
 

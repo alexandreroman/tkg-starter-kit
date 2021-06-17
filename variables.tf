@@ -32,6 +32,12 @@ variable "dockerhub_password" {
   type = string
 }
 
+variable "kube_config" {
+  type    = string
+  default = "~/.kube/config"
+  description = "if you overide the value, export the 'KUBECONFIG' env variable also. Eg.  export KUBECONFIG=~/.kube/config-files/kubeconfig-aws-tools.yml or set it on the command line KUBECONFIG=~/.kube/config-files/kubeconfig-aws-tools.yml terraform apply"
+}
+
 resource "random_string" "harbor_admin_password" {
   length           = 16
   special          = true

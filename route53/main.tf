@@ -5,16 +5,16 @@ terraform {
       version = ">= 3.0"
     }
     kubectl = {
-      source = "gavinbunney/kubectl"
-      version = ">= 1.10.0"
+      source  = "gavinbunney/kubectl"
+      version = ">= 1.11.0"
     }
     kubernetes = {
       source  = "hashicorp/kubernetes"
-      version = ">= 2.0.0"
+      version = ">= 2.3.0"
     }
     helm = {
-      source = "hashicorp/helm"
-      version = "1.3.2"
+      source  = "hashicorp/helm"
+      version = "2.1.2"
     }
   }
 }
@@ -26,12 +26,12 @@ provider "aws" {
 }
 
 provider "kubernetes" {
-  config_path = "~/.kube/config"
+  config_path = var.kube_config
 }
 
 provider "helm" {
   kubernetes {
-    config_path = "~/.kube/config"
+    config_path = var.kube_config
   }
 }
 
@@ -47,25 +47,25 @@ resource "aws_iam_user_policy" "dns_challenge_policy" {
   name = "dns-challenge-policy"
   user = aws_iam_user.dns_challenge.name
   policy = jsonencode({
-    "Version": "2012-10-17",
-    "Statement": [
+    "Version" : "2012-10-17",
+    "Statement" : [
       {
-        "Effect": "Allow",
-        "Action": "route53:GetChange",
-        "Resource": "arn:aws:route53:::change/*"
+        "Effect" : "Allow",
+        "Action" : "route53:GetChange",
+        "Resource" : "arn:aws:route53:::change/*"
       },
       {
-        "Effect": "Allow",
-        "Action": [
+        "Effect" : "Allow",
+        "Action" : [
           "route53:ChangeResourceRecordSets",
           "route53:ListResourceRecordSets"
         ],
-        "Resource": "arn:aws:route53:::hostedzone/*"
+        "Resource" : "arn:aws:route53:::hostedzone/*"
       },
       {
-        "Effect": "Allow",
-        "Action": "route53:ListHostedZonesByName",
-        "Resource": "*"
+        "Effect" : "Allow",
+        "Action" : "route53:ListHostedZonesByName",
+        "Resource" : "*"
       }
     ]
   })
@@ -76,8 +76,8 @@ resource "aws_iam_access_key" "dns_challenge" {
 }
 
 resource "helm_release" "cert_manager" {
-  name       = "cert-manager"
-  chart      = "https://charts.jetstack.io/charts/cert-manager-v1.2.0.tgz"
+  name  = "cert-manager"
+  chart = "https://charts.jetstack.io/charts/cert-manager-v1.3.1.tgz"
 
   namespace        = "cert-manager"
   create_namespace = true
@@ -101,7 +101,7 @@ resource "helm_release" "cert_manager" {
 }
 
 resource "kubernetes_secret" "route53" {
-  depends_on = [ helm_release.cert_manager ]
+  depends_on = [helm_release.cert_manager]
 
   metadata {
     name      = "route53-secret"
@@ -113,17 +113,18 @@ resource "kubernetes_secret" "route53" {
   }
 }
 
-resource "time_sleep" "wait_30_seconds" {
-  depends_on = [ helm_release.cert_manager ]
+resource "time_sleep" "wait_40_seconds" {
+  depends_on = [helm_release.cert_manager]
 
-  create_duration = "30s"
+  create_duration = "40s"
 }
 
 resource "kubectl_manifest" "cert_manager_issuer" {
+
   # There's a bug with the cert-manager deployment: the ClusterIssuer cannot be deployed
   # right after cert-manager, because of a certificate error with the mutating webhook.
   # Adding some delay before deploying the ClusterIssuer works for now.
-  depends_on = [ time_sleep.wait_30_seconds ]
+  depends_on = [time_sleep.wait_40_seconds]
 
   yaml_body = <<YAML
 apiVersion: cert-manager.io/v1
@@ -138,8 +139,8 @@ spec:
       name: issuer-account-key
     solvers:
       - selector:
-        dnsZones:
-        - "${var.domain}"
+          dnsZones:
+          - "${var.domain}"
         dns01:
           route53:
             region: ${var.aws_region}
@@ -151,6 +152,7 @@ spec:
 YAML
 }
 
+
 resource "kubernetes_namespace" "external_dns" {
   metadata {
     name = "external-dns"
@@ -159,7 +161,7 @@ resource "kubernetes_namespace" "external_dns" {
 
 resource "kubernetes_secret" "dockerhub" {
   metadata {
-    name = "regcreds"
+    name      = "regcreds"
     namespace = "external-dns"
   }
   data = {
@@ -177,7 +179,7 @@ DOCKER
 }
 
 resource "helm_release" "external_dns" {
-  depends_on = [ kubernetes_secret.dockerhub, kubernetes_namespace.external_dns ]
+  depends_on = [kubernetes_secret.dockerhub, kubernetes_namespace.external_dns]
 
   name      = "external-dns"
   chart     = "https://charts.bitnami.com/bitnami/external-dns-5.0.3.tgz"

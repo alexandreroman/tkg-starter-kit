@@ -2,38 +2,37 @@ terraform {
   required_providers {
     kubernetes = {
       source  = "hashicorp/kubernetes"
-      version = ">= 2.0.0"
-    }
-    kubectl = {
-      source = "gavinbunney/kubectl"
-      version = ">= 1.10.0"
+      version = ">= 2.3.0"
     }
     helm = {
-      source = "hashicorp/helm"
-      version = "1.3.2"
+      source  = "hashicorp/helm"
+      version = "2.1.2"
     }
   }
 }
 
 provider "kubernetes" {
-  config_path = "~/.kube/config"
+  config_path = var.kube_config
 }
 
 provider "helm" {
   kubernetes {
-    config_path = "~/.kube/config"
+    config_path = var.kube_config
   }
 }
 
 resource "kubernetes_namespace" "harbor" {
+
   metadata {
     name = "harbor"
   }
 }
 
 resource "kubernetes_secret" "dockerhub" {
+  depends_on = [kubernetes_namespace.harbor]
+  
   metadata {
-    name = "regcreds"
+    name      = "regcreds"
     namespace = "harbor"
   }
   data = {
@@ -51,7 +50,7 @@ DOCKER
 }
 
 resource "helm_release" "harbor" {
-  depends_on = [ kubernetes_secret.dockerhub, kubernetes_namespace.harbor ]
+  depends_on = [kubernetes_secret.dockerhub, kubernetes_namespace.harbor]
 
   name      = "harbor"
   chart     = "https://helm.goharbor.io/harbor-1.6.2.tgz"

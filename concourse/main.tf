@@ -4,24 +4,20 @@ terraform {
       source  = "hashicorp/kubernetes"
       version = ">= 2.0.0"
     }
-    kubectl = {
-      source = "gavinbunney/kubectl"
-      version = ">= 1.10.0"
-    }
     helm = {
-      source = "hashicorp/helm"
-      version = "1.3.2"
+      source  = "hashicorp/helm"
+       version = "2.1.2"
     }
   }
 }
 
 provider "kubernetes" {
-  config_path = "~/.kube/config"
+  config_path = var.kube_config
 }
 
 provider "helm" {
   kubernetes {
-    config_path = "~/.kube/config"
+    config_path = var.kube_config
   }
 }
 
@@ -33,7 +29,7 @@ resource "kubernetes_namespace" "concourse" {
 
 resource "kubernetes_secret" "dockerhub" {
   metadata {
-    name = "regcreds"
+    name      = "regcreds"
     namespace = "concourse"
   }
   data = {
@@ -51,7 +47,7 @@ DOCKER
 }
 
 resource "helm_release" "concourse" {
-  depends_on = [ kubernetes_secret.dockerhub, kubernetes_namespace.concourse ]
+  depends_on = [kubernetes_secret.dockerhub, kubernetes_namespace.concourse]
 
   name      = "concourse"
   chart     = "https://concourse-charts.storage.googleapis.com/concourse-14.6.2.tgz"
@@ -85,31 +81,31 @@ resource "helm_release" "concourse" {
     type  = "string"
   }
   set {
-    name = "web.ingress.tls[0].secretName"
+    name  = "web.ingress.tls[0].secretName"
     value = "concourse-web-tls"
   }
   set {
-    name = "web.ingress.tls[0].hosts[0]"
+    name  = "web.ingress.tls[0].hosts[0]"
     value = "concourse.${var.domain}"
   }
   set {
-    name = "secrets.localUsers"
+    name  = "secrets.localUsers"
     value = "admin:${var.admin_password}"
   }
   set {
     name = "concourse.web.auth.mainTeam.config"
     value = yamlencode({
-      "roles": [
-        { "name": "owner", "local": { "users": ["admin"] } }
+      "roles" : [
+        { "name" : "owner", "local" : { "users" : ["admin"] } }
       ]
     })
   }
   set {
-    name = "concourse.web.auth.mainTeam.localUser"
+    name  = "concourse.web.auth.mainTeam.localUser"
     value = "admin"
   }
   set {
-    name = "concourse.web.externalUrl"
+    name  = "concourse.web.externalUrl"
     value = "https://concourse.${var.domain}"
   }
 }

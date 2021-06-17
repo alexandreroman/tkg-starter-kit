@@ -4,24 +4,20 @@ terraform {
       source  = "hashicorp/kubernetes"
       version = ">= 2.0.0"
     }
-    kubectl = {
-      source = "gavinbunney/kubectl"
-      version = ">= 1.10.0"
-    }
     helm = {
-      source = "hashicorp/helm"
-      version = "1.3.2"
+      source  = "hashicorp/helm"
+      version = "2.1.2"
     }
   }
 }
 
 provider "kubernetes" {
-  config_path = "~/.kube/config"
+  config_path = var.kube_config
 }
 
 provider "helm" {
   kubernetes {
-    config_path = "~/.kube/config"
+    config_path = var.kube_config
   }
 }
 
@@ -65,7 +61,7 @@ resource "kubernetes_service_account" "kubeapps_operator" {
 }
 
 resource "kubernetes_cluster_role_binding" "kubeapps_operator" {
-  depends_on = [ helm_release.kubeapps ]
+  depends_on = [helm_release.kubeapps]
 
   metadata {
     name = "kubeapps-operator"
@@ -83,10 +79,9 @@ resource "kubernetes_cluster_role_binding" "kubeapps_operator" {
 }
 
 module "credentials" {
-  source = "matti/resource/shell"
-
+  source = "matti/resource/shell"  
   command = <<EOT
-    kubectl get secret $(kubectl get serviceaccount kubeapps-operator -o jsonpath='{range .secrets[*]}{.name}{"\n"}{end}' | grep kubeapps-operator-token) -o jsonpath='{.data.token}' -o go-template='{{.data.token | base64decode}}' && echo
+    KUBECONFIG=${var.kube_config} kubectl get secret $(KUBECONFIG=${var.kube_config} kubectl get serviceaccount kubeapps-operator -o jsonpath='{range .secrets[*]}{.name}{"\n"}{end}' | grep kubeapps-operator-token) -o jsonpath='{.data.token}' -o go-template='{{.data.token | base64decode}}' && echo
   EOT
 }
 

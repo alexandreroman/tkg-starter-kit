@@ -5,3 +5,8 @@ variable "dockerhub_user" {
 variable "dockerhub_password" {
   type = string
 }
+
+variable "kube_config" {
+  type    = string  
+}
+
