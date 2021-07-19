@@ -77,7 +77,7 @@ resource "aws_iam_access_key" "dns_challenge" {
 
 resource "helm_release" "cert_manager" {
   name       = "cert-manager"
-  chart      = "https://charts.jetstack.io/charts/cert-manager-v1.2.0.tgz"
+  chart      = "https://charts.jetstack.io/charts/cert-manager-v1.4.0.tgz"
 
   namespace        = "cert-manager"
   create_namespace = true
