@@ -1,0 +1,15 @@
+#@ load("@ytt:overlay", "overlay")
+
+#! The external-dns Helm chart does not set the namespace for this Secret
+#! for some reason.
+
+#@overlay/match by=overlay.subset({"kind": "Secret", "metadata": {"labels": { "app.kubernetes.io/name": "external-dns"}}}),expects="1+"
+---
+metadata:
+  #@overlay/match missing_ok=True
+  namespace: external-dns
+---
+apiVersion: v1
+kind: Namespace
+metadata:
+  name: external-dns

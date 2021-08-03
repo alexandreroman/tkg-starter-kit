@@ -1,0 +1,7 @@
+#@ load("@ytt:overlay", "overlay")
+
+#! Remove cert-manager CRDs since these objects are deployed outside of kapp,
+#! because of dependency order: CRDs must be deployed first.
+
+#@overlay/match by=overlay.subset({"kind": "CustomResourceDefinition", "metadata": {"labels": { "app": "cert-manager"}}}),expects="1+"
+#@overlay/remove

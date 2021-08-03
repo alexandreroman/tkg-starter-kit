@@ -1,0 +1,12 @@
+#@ load("@ytt:overlay", "overlay")
+
+#@overlay/match by=overlay.subset({"metadata": {"labels": { "chart": "harbor"}}}),expects="1+"
+---
+metadata:
+  #@overlay/match missing_ok=True
+  namespace: harbor
+---
+apiVersion: v1
+kind: Namespace
+metadata:
+  name: harbor

@@ -1,0 +1,14 @@
+#@ load("@ytt:overlay", "overlay")
+
+#@ ns = overlay.subset({"kind": "namespace"})
+#@ cluster_role = overlay.subset({"kind": "ClusterRole"})
+#@overlay/match by=overlay.not_op(overlay.or_op(ns, cluster_role)),expects="1+"
+---
+metadata:
+  #@overlay/match missing_ok=True
+  namespace: concourse
+---
+apiVersion: v1
+kind: Namespace
+metadata:
+  name: concourse

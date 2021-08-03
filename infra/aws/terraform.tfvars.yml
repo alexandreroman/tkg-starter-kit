@@ -1,0 +1,8 @@
+#@ load("@ytt:data", "data")
+aws_access_key: #@ "{}".format(data.values.AWS_ACCESS_KEY)
+aws_secret_key: #@ "{}".format(data.values.AWS_SECRET_KEY)
+aws_region    : #@ "{}".format(data.values.AWS_REGION)
+
+domain: #@ "{}".format(data.values.DOMAIN)
+
+letsencrypt_issuer_email: #@ "{}".format(data.values.LETS_ENCRYPT_ISSUER_EMAIL)

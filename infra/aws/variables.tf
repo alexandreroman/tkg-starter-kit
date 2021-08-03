@@ -23,16 +23,3 @@ variable "letsencrypt_issuer" {
 variable "letsencrypt_issuer_email" {
   type = string
 }
-
-variable "letsencrypt_prod" {
-  type    = bool
-  default = false
-}
-
-variable "dockerhub_user" {
-  type = string
-}
-
-variable "dockerhub_password" {
-  type = string
-}

@@ -1,0 +1,25 @@
+apiVersion: kubeapps.com/v1alpha1
+kind: AppRepository
+metadata:
+  name: tac
+  namespace: kubeapps
+spec:
+  type: helm
+  url: https://charts.trials.tac.bitnami.com/demo
+  syncJobPodTemplate:
+    spec:
+      securityContext:
+        runAsUser: 1001
+---
+apiVersion: kubeapps.com/v1alpha1
+kind: AppRepository
+metadata:
+  name: vmware-marketplace
+  namespace: kubeapps
+spec:
+  type: helm
+  url: https://charts.market.csp.vmware.com/bitnami
+  syncJobPodTemplate:
+    spec:
+      securityContext:
+        runAsUser: 1001

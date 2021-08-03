@@ -1,0 +1,33 @@
+#@ load("@ytt:data", "data")
+externalURL: #@ "https://harbor.{}".format(data.values.DOMAIN)
+harborAdminPassword: #@ "{}".format(data.values.HARBOR_ADMIN_PASSWORD)
+expose:
+  ingress:
+    hosts:
+      core: #@ "harbor.{}".format(data.values.DOMAIN)
+    annotations:
+      kubernetes.io/tls-acme: "true"
+      ingress.kubernetes.io/force-ssl-redirect: "true"
+      cert-manager.io/cluster-issuer: #@ data.values.CERT_MANAGER_ISSUER
+      external-dns.alpha.kubernetes.io/hostname: #@ "harbor.{}".format(data.values.DOMAIN)
+  tls:
+    certSource: secret
+    secret:
+      secretName: harbor-tls
+notary:
+  enabled: false
+persistence:
+  resourcePolicy: ""
+  persistentVolumeClaim:
+    registry:
+      size: 100Gi
+    chartmuseum:
+      size: 10Gi
+    database:
+      size: 10Gi
+    redis:
+      size: 2Gi
+database:
+  maxOpenConns: 300
+updateStrategy:
+  type: Recreate

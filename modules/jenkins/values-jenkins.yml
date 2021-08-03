@@ -1,0 +1,76 @@
+#@ load("@ytt:data", "data")
+controller:
+  adminPassword: #@ data.values.JENKINS_ADMIN_PASSWORD
+  ingress:
+    enabled: true
+    hostName: #@ "jenkins.{}".format(data.values.DOMAIN)
+    annotations:
+      ingress.kubernetes.io/force-ssl-redirect: "true"
+      kubernetes.io/tls-acme: "true"
+      cert-manager.io/cluster-issuer: #@ data.values.CERT_MANAGER_ISSUER
+    tls:
+    - secretName: jenkins-tls
+      hosts:
+      - #@ "jenkins.{}".format(data.values.DOMAIN)
+  additionalPlugins:
+  - adoptopenjdk:1.4
+  - generic-webhook-trigger:1.74
+  - nodejs:1.4.0
+  - file-operations:1.11
+  numExecutors: 3
+  JCasC:
+    authorizationStrategy: loggedInUsersCanDoAnything
+    configScripts:
+      jenkins: |
+        jenkins: {
+          systemMessage: "Welcome to Jenkins powered by VMware Tanzu!"
+        }
+      adoptopenjdk: |
+        tool: {
+          jdk: {
+            installations: [
+              { name: "jdk-11", properties: [{
+                installSource: {
+                  installers: [{
+                    adoptOpenJdkInstaller: {
+                      id: "jdk-11.0.12+7"
+                    }
+                  }]
+                }
+              }
+            ]}
+          ]}
+        }
+      mvn: |
+        tool: {
+          maven: {
+            installations: [
+              { name: "Maven 3", properties: [{
+                installSource: {
+                  installers: [{
+                    maven: {
+                      id: "3.8.1"
+                    }
+                  }]
+                }
+              }
+            ]}
+          ]}
+        }
+      nodejs: |
+        tool: {
+          nodejs: {
+            installations: [
+              { name: "NodeJS 14", properties: [{
+                installSource: {
+                  installers: [{
+                    nodeJSInstaller: {
+                      id: "14.17.4",
+                      npmPackagesRefreshHours: 72
+                    }
+                  }]
+                }
+              }
+            ]}
+          ]}
+        }

@@ -1,0 +1,11 @@
+ #@ load("@ytt:data", "data")
+ingress:
+  enabled: true
+  hostname: #@ "appcatalog.{}".format(data.values.DOMAIN)
+  certManager: true
+  tls: true
+  annotations:
+    ingress.kubernetes.io/force-ssl-redirect: "true"
+    cert-manager.io/cluster-issuer: #@ data.values.CERT_MANAGER_ISSUER
+frontend:
+  replicaCount: 1

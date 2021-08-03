@@ -1,0 +1,4 @@
+#@data/values
+---
+#! Insert your custom configuration values here.
+HARBOR_ADMIN_PASSWORD: changeme

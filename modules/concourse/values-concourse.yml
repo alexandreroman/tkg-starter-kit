@@ -1,0 +1,27 @@
+#@ load("@ytt:data", "data")
+web:
+  ingress:
+    enabled: true
+    hosts:
+    - #@ "concourse.{}".format(data.values.DOMAIN)
+    annotations:
+      ingress.kubernetes.io/force-ssl-redirect: "true"
+      kubernetes.io/tls-acme: "true"
+      cert-manager.io/cluster-issuer: #@ data.values.CERT_MANAGER_ISSUER
+    tls:
+    - secretName: concourse-web-tls
+      hosts:
+      - #@ "concourse.{}".format(data.values.DOMAIN)
+secrets:
+  localUsers: #@ "admin:{}".format(data.values.CONCOURSE_ADMIN_PASSWORD)
+concourse:
+  web:
+    auth:
+      mainTeam:
+        config: |
+          roles:
+          - name: owner
+            local:
+              users: ["admin"]
+        localUser: admin
+    externalUrl: #@ "https://concourse.{}".format(data.values.DOMAIN)

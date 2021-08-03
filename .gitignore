@@ -1,6 +1,8 @@
 .DS_Store
 terraform.tfvars
-cluster-issuer.yaml
 .terraform*
 *.tfstate*
-modules.tf
+k8s.yml
+values-external-dns.yml
+_ytt.*.yml
+config-custom/*.yml
