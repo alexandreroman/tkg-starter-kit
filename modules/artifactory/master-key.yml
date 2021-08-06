@@ -1,0 +1,9 @@
+#@ load("@ytt:data", "data")
+#@ load("@ytt:md5", "md5")
+apiVersion: v1
+kind: Secret
+metadata:
+  name: master-key
+  namespace: artifactory
+stringData:
+  master-key: #@ md5.sum(data.values.DOMAIN)

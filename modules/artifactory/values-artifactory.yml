@@ -1,0 +1,21 @@
+#@ load("@ytt:data", "data")
+artifactory:
+  masterKeySecretName: master-key
+  admin:
+    ip: "*"
+  nginx:
+    enabled: false
+  ingress:
+    enabled: true
+    hosts:
+    - #@ "artifactory.{}".format(data.values.DOMAIN)
+    annotations:
+      kubernetes.io/tls-acme: "true"
+      ingress.kubernetes.io/force-ssl-redirect: "true"
+      cert-manager.io/cluster-issuer: #@ data.values.CERT_MANAGER_ISSUER
+    tls:
+      - secretName: artifactory-tls
+        hosts:
+        - #@ "artifactory.{}".format(data.values.DOMAIN)
+  postgresql:
+    postgresqlPassword: root123

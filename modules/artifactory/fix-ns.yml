@@ -1,0 +1,12 @@
+#@ load("@ytt:overlay", "overlay")
+
+#@overlay/match by=overlay.subset({"metadata": {"labels": { "app": "artifactory"}}}),expects="1+"
+---
+metadata:
+  #@overlay/match missing_ok=True
+  namespace: artifactory
+---
+apiVersion: v1
+kind: Namespace
+metadata:
+  name: artifactory
