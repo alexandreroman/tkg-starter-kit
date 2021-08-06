@@ -6,6 +6,7 @@ CONCOURSE_CHART_VERSION=15.7.0
 JENKINS_CHART_VERSION=3.5.9
 KUBEAPPS_CHART_VERSION=7.2.1
 ARTIFACTORY_CHART_VERSION=107.23.3
+PROMETHEUS_CHART_VERSION=6.1.4
 
 .PHONY: clean prepare
 
@@ -81,3 +82,10 @@ deploy-artifactory: deploy-base
 	kapp deploy -y -a sk-artifactory -f _ytt.2.yml
 	@-rm -f _ytt.*.yml
 	@echo "Default credentials: admin / password"
+
+deploy-prometheus: deploy-base
+	$(shell ytt -f modules/prometheus/values-prometheus.yml -f config -f config-custom >_ytt.0.yml)
+	$(shell helm template prometheus https://charts.bitnami.com/bitnami/kube-prometheus-${PROMETHEUS_CHART_VERSION}.tgz -n prometheus -f _ytt.0.yml >_ytt.1.yml)
+	$(shell ytt -f _ytt.1.yml -f modules/prometheus/fix-ns.yml -f modules/prometheus/fix-labels.yml -f https://raw.githubusercontent.com/bitnami/charts/master/bitnami/kube-prometheus/crds/crd-alertmanager-config.yaml -f https://raw.githubusercontent.com/bitnami/charts/master/bitnami/kube-prometheus/crds/crd-alertmanager.yaml -f https://raw.githubusercontent.com/bitnami/charts/master/bitnami/kube-prometheus/crds/crd-podmonitor.yaml -f https://raw.githubusercontent.com/bitnami/charts/master/bitnami/kube-prometheus/crds/crd-probes.yaml -f https://raw.githubusercontent.com/bitnami/charts/master/bitnami/kube-prometheus/crds/crd-prometheus.yaml -f https://raw.githubusercontent.com/bitnami/charts/master/bitnami/kube-prometheus/crds/crd-prometheusrules.yaml -f https://raw.githubusercontent.com/bitnami/charts/master/bitnami/kube-prometheus/crds/crd-servicemonitor.yaml -f config -f config-custom >_ytt.2.yml)
+	kapp deploy -y -a sk-prometheus -f _ytt.2.yml
+	@-rm -f _ytt.*.yml
