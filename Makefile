@@ -89,3 +89,9 @@ deploy-prometheus: deploy-base
 	$(shell ytt -f _ytt.1.yml -f modules/prometheus/fix-ns.yml -f modules/prometheus/fix-labels.yml -f https://raw.githubusercontent.com/bitnami/charts/master/bitnami/kube-prometheus/crds/crd-alertmanager-config.yaml -f https://raw.githubusercontent.com/bitnami/charts/master/bitnami/kube-prometheus/crds/crd-alertmanager.yaml -f https://raw.githubusercontent.com/bitnami/charts/master/bitnami/kube-prometheus/crds/crd-podmonitor.yaml -f https://raw.githubusercontent.com/bitnami/charts/master/bitnami/kube-prometheus/crds/crd-probes.yaml -f https://raw.githubusercontent.com/bitnami/charts/master/bitnami/kube-prometheus/crds/crd-prometheus.yaml -f https://raw.githubusercontent.com/bitnami/charts/master/bitnami/kube-prometheus/crds/crd-prometheusrules.yaml -f https://raw.githubusercontent.com/bitnami/charts/master/bitnami/kube-prometheus/crds/crd-servicemonitor.yaml -f config -f config-custom >_ytt.2.yml)
 	kapp deploy -y -a sk-prometheus -f _ytt.2.yml
 	@-rm -f _ytt.*.yml
+
+deploy-kpack: deploy-base
+	kapp deploy -y -a sk-kpack -f modules/kpack/cluster-stack.yml -f modules/kpack/cluster-store.yml -f https://github.com/pivotal/kpack/releases/download/v0.3.1/release-0.3.1.yaml
+	@echo ClusterStore and ClusterStack instances have been deployed to your cluster.
+	@echo Follow kpack tutorial to set up a ServiceAccount and a ClusterBuilder:
+	@echo "  https://github.com/pivotal/kpack/blob/main/docs/tutorial.md"
