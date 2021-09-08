@@ -9,7 +9,6 @@ expose:
       kubernetes.io/tls-acme: "true"
       ingress.kubernetes.io/force-ssl-redirect: "true"
       cert-manager.io/cluster-issuer: #@ data.values.CERT_MANAGER_ISSUER
-      external-dns.alpha.kubernetes.io/hostname: #@ "harbor.{}".format(data.values.DOMAIN)
   tls:
     certSource: secret
     secret:
