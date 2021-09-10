@@ -53,7 +53,7 @@ resource "helm_release" "harbor" {
   depends_on = [kubernetes_secret.dockerhub, kubernetes_namespace.harbor]
 
   name      = "harbor"
-  chart     = "https://helm.goharbor.io/harbor-1.6.2.tgz"
+  chart     = "https://helm.goharbor.io/harbor-1.7.2.tgz"
   namespace = "harbor"
 
   set {
