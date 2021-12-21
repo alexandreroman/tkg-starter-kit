@@ -21,7 +21,7 @@ variable "letsencrypt_issuer_email" {
 
 variable "letsencrypt_prod" {
   type    = bool
-  default = false
+  default = true
 }
 
 variable "dockerhub_user" {
