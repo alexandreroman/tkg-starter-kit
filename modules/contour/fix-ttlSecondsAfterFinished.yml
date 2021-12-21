@@ -1,0 +1,13 @@
+#@ load("@ytt:overlay", "overlay")
+
+#! Set the ttlSecondsAfterFinished > 0 else kapp (v0.43) fails with 
+#! Getting resource job/contour-contour-certgen (batch/v1) namespace: contour: jobs.batch "contour-contour-certgen" not found (reason: NotFound)
+#! https://github.com/vmware-tanzu/carvel-kapp/issues/333#issuecomment-953082309
+#! 
+
+#@overlay/match by=overlay.subset({"kind": "Job"}),expects="1+"
+---
+spec:
+  #@overlay/match missing_ok=True
+  ttlSecondsAfterFinished: 60
+  
