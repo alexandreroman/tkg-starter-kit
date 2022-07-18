@@ -6,3 +6,4 @@ k8s.yml
 values-external-dns.yml
 _ytt.*.yml
 config-custom/*.yml
+.vscode
