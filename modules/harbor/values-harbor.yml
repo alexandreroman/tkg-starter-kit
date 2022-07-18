@@ -19,7 +19,7 @@ persistence:
   resourcePolicy: ""
   persistentVolumeClaim:
     registry:
-      size: 100Gi
+      size: 200Gi
     chartmuseum:
       size: 10Gi
     database:
