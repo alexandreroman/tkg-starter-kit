@@ -1,0 +1,23 @@
+apiVersion: kappctrl.k14s.io/v1alpha1
+kind: App
+metadata:
+  name: tanzu-gitops
+  namespace: tanzu-gitops
+spec:
+  serviceAccountName: tanzu-gitops-sa
+  syncPeriod: 10m
+  fetch:
+  - git:
+      url: https://github.com/user/tkg-starter-kit-sample
+      ref: origin/main
+      subPath: gitops
+      secretRef:
+        name: tanzu-gitops-git
+  template:
+  - ytt:
+      paths:
+      - config
+      - config-custom
+      - gitops
+  deploy:
+  - kapp: {}

@@ -2,8 +2,9 @@
 terraform.tfvars
 .terraform*
 *.tfstate*
-k8s.yml
-values-external-dns.yml
 _ytt.*.yml
 config-custom/*.yml
 .vscode
+*secret*.yaml
+gitops-kapp.yaml
+route53-values.yaml
